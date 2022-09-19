@@ -14,7 +14,8 @@ module.exports = {
   rules: {
     'prettier/prettier': 'error',
     quotes: ['error', 'single', { allowTemplateLiterals: true }],
-    'no-unused-vars': 'warn',
     'func-names': ['error', 'as-needed'],
+    'no-unused-vars': 'false',
+    // 'max-classes-per-file': ['false'],
   },
 };
