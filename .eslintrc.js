@@ -3,7 +3,8 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ['airbnb-base', 'plugin:prettier/recommended'],
+  // extends: ['airbnb-base', 'prettier', 'plugin:prettier/recommended'],
+  extends: ['airbnb-base', 'prettier'],
   plugins: ['prettier'],
   overrides: [],
   parserOptions: {
@@ -14,5 +15,6 @@ module.exports = {
     'prettier/prettier': 'error',
     quotes: ['error', 'single', { allowTemplateLiterals: true }],
     'no-unused-vars': 'warn',
+    'func-names': ['error', 'as-needed'],
   },
 };
