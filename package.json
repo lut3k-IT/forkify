@@ -23,6 +23,9 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
-    "prettier": "^2.7.1"
+    "core-js": "^3.25.2",
+    "fractional": "^1.0.0",
+    "prettier": "^2.7.1",
+    "regenerator-runtime": "^0.13.9"
   }
 }
