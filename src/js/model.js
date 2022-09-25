@@ -1,14 +1,14 @@
-import axios from 'axios';
 import endpoints from './names/endpoints';
-const BASE_URL = 'https://forkify-api.herokuapp.com/api/v2';
+import { BASE_URL } from './config';
+import { getRequest } from './helpers';
 
 export const state = {
   recipe: {},
 };
 
-export const loadRecipe = async recipeId => {
+export const getRecipe = async recipeId => {
   try {
-    const response = await axios.get(
+    const response = await getRequest(
       `${BASE_URL}/${endpoints.RECIPES}/${recipeId}`,
     );
 
