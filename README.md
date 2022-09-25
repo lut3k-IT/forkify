@@ -21,7 +21,7 @@ In the project there are eslint and prettier config files. It's nice to follow g
 # Get into the project
 
 There are some commands:
-npm start - start the development
-npm biuld - build the app for production
-npm lint - [todo]
-npm lint:fix - fixes all fixable issues
+- npm start - start the development
+- npm biuld - build the app for production
+- npm lint - [todo]
+- npm lint:fix - fixes all fixable issues
