@@ -4,4 +4,4 @@
 export const BASE_URL = 'https://forkify-api.herokuapp.com/api/v2';
 
 // values
-export const ABORT_TIMEOUT = 0.5;
+export const ABORT_TIMEOUT = 10;
