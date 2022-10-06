@@ -1,3 +1,3 @@
-export default class endpoints {
-  static RECIPES = 'recipes';
+export default class Endpoints {
+  static RECIPES = 'recipes/';
 }
