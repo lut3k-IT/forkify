@@ -1,6 +1,10 @@
-import Endpoints from './names/endpoints';
-import { BASE_URL } from './config';
-import { getRequest } from './helpers';
+import Endpoints from './utils/endpoints';
+import {
+  BASE_URL,
+  SEARCH_INIT_PAGE,
+  SERACH_RESULTS_PER_PAGE,
+} from './utils/config';
+import { getRequest } from './utils/helpers';
 
 /* -------------------------------------------------------------------------- */
 /*                                   storage                                  */
@@ -11,6 +15,8 @@ export const state = {
   search: {
     query: '',
     results: [],
+    resultsPerPage: SERACH_RESULTS_PER_PAGE,
+    page: SEARCH_INIT_PAGE,
   },
 };
 
@@ -62,4 +68,13 @@ export const loadSearchResults = async query => {
     console.error(err);
     throw err;
   }
+};
+
+export const getSearchResultsPage = (page = state.search.page) => {
+  state.search.page = page;
+
+  const start = (page - 1) * state.search.resultsPerPage || 0;
+  const end = page * state.search.resultsPerPage || 9;
+
+  return state.search.results.slice(start, end);
 };
