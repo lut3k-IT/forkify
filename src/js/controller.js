@@ -3,10 +3,11 @@ import 'core-js/stable';
 import 'regenerator-runtime';
 
 // modules
-import RecipeView from './views/recipeView';
-import SearchView from './views/searchView';
-import ResultsView from './views/resultsView';
+import RecipeView from './views/RecipeView';
+import SearchView from './views/SearchView';
+import ResultsView from './views/SesultsView';
 import * as model from './model';
+import PaginationView from './views/PaginationView';
 
 /* -------------------------------------------------------------------------- */
 /*                           parcel keeps the state                           */
@@ -36,13 +37,20 @@ const controlRecipes = async () => {
 
 const controlSearchResults = async () => {
   try {
-    const query = SearchView.getQuery();
-    if (!query) return;
     ResultsView.renderSpinner();
 
+    // search query
+    const query = SearchView.getQuery();
+    if (!query) return;
+
+    // load results
     await model.loadSearchResults(query);
-    // ResultsView.render(model.state.search.results);
+
+    // render results
     ResultsView.render(model.getSearchResultsPage());
+
+    // render init pagination
+    PaginationView.render(model.state.search);
   } catch (err) {
     console.error(err);
     RecipeView.renderError();

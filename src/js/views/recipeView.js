@@ -1,11 +1,12 @@
 import View from './View';
 import icons from '/src/img/icons.svg';
 import { Fraction } from 'fractional';
+import Messages from '../utils/Messages';
 
 class RecipeView extends View {
   _parentEl = document.querySelector('.recipe');
-  _msg = 'Loaded successfully';
-  _errMsg = 'We can not load a recipe';
+  _msg = '';
+  _errMsg = Messages.RECIPE_ERROR;
 
   addHandlerRender(handler) {
     ['load', 'hashchange'].forEach(ev => window.addEventListener(ev, handler));

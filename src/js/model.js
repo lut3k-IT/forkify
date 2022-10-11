@@ -1,4 +1,4 @@
-import Endpoints from './utils/endpoints';
+import Endpoints from './utils/Endpoints';
 import {
   BASE_URL,
   SEARCH_INIT_PAGE,

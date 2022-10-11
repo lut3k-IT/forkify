@@ -1,10 +1,13 @@
 import View from './View';
+import Messages from '../utils/Messages';
 import icons from '/src/img/icons.svg';
+
+console.log(Messages.RESULTS_ERROR);
 
 class ResultsView extends View {
   _parentEl = document.querySelector('.results');
   _msg = 'Loaded successfully';
-  _errMsg = 'We can not load the recipes';
+  _errMsg = Messages.RESULTS_ERROR;
 
   _generateMarkup() {
     return this._data.map(this._generateMarkupPreview).join('');
