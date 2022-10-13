@@ -1,10 +1,19 @@
 import View from './View';
 import icons from '/src/img/icons.svg';
 
-class ResultsView extends View {
+class PaginationView extends View {
   _parentEl = document.querySelector('.pagination');
 
-  //TODO:
+  addHandlerClick(handler) {
+    this._parentEl.addEventListener('click', function (e) {
+      const btn = e.target.closest('.btn--inline');
+      if (!btn) return;
+
+      const goToPage = +btn.dataset.goto;
+      handler(goToPage);
+    });
+  }
+
   _generateMarkup() {
     const curPage = this._data.page;
     const numOfPages = Math.ceil(
@@ -28,29 +37,27 @@ class ResultsView extends View {
         this._generateMarkupNextPage(curPage)
       );
     }
-
     // Page 1, and there are no other pages
-    return `
-      <div>
-        Page 1 of 1
-      </div>
-    `;
   }
 
   _generateMarkupPreviousPage(curPage) {
     return `
-      <button class="btn--inline pagination__btn--prev">
+      <button data-goto="${
+        curPage - 1
+      }" class="btn--inline pagination__btn--prev">
         <svg class="search__icon">
           <use href="${icons}#icon-arrow-left"></use>
         </svg>
-        <span>${curPage - 1}</span>
+        <span>Page ${curPage - 1}</span>
       </button>
     `;
   }
   _generateMarkupNextPage(curPage) {
     return `
-      <button class="btn--inline pagination__btn--next">
-        <span>${curPage + 1}</span>
+      <button data-goto="${
+        curPage + 1
+      }" class="btn--inline pagination__btn--next">
+        <span>Page ${curPage + 1}</span>
         <svg class="search__icon">
           <use href="${icons}#icon-arrow-right"></use>
         </svg>
@@ -59,4 +66,4 @@ class ResultsView extends View {
   }
 }
 
-export default new ResultsView();
+export default new PaginationView();

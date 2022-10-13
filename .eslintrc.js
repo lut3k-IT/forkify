@@ -3,7 +3,6 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  // extends: ['airbnb-base', 'prettier', 'plugin:prettier/recommended'],
   extends: ['airbnb-base', 'prettier'],
   plugins: ['prettier'],
   overrides: [],
@@ -16,6 +15,5 @@ module.exports = {
     quotes: ['error', 'single', { allowTemplateLiterals: true }],
     'func-names': ['error', 'as-needed'],
     'no-unused-vars': 'false',
-    // 'max-classes-per-file': ['false'],
   },
 };

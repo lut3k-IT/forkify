@@ -57,11 +57,20 @@ const controlSearchResults = async () => {
   }
 };
 
+const controlPagination = page => {
+  // render new results
+  ResultsView.render(model.getSearchResultsPage(page));
+
+  // render new pagination
+  PaginationView.render(model.state.search);
+};
+
 /* -------------------------------------------------------------------------- */
 /*                                    init                                    */
 /* -------------------------------------------------------------------------- */
 
 (() => {
   RecipeView.addHandlerRender(controlRecipes);
-  SearchView.addHandleSearch(controlSearchResults);
+  SearchView.addHandlerSearch(controlSearchResults);
+  PaginationView.addHandlerClick(controlPagination);
 })();
