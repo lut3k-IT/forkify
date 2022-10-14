@@ -4,7 +4,7 @@ This is a project from Jonas Schmedtmann course. But I don't want to copy paste 
 
 # About the project
 
-My host: [todo]
+My host: https://lut3k-forkify.netlify.app
 
 ## File organisation
 
