@@ -11,7 +11,16 @@ import { getRequest } from './utils/helpers';
 /* -------------------------------------------------------------------------- */
 
 export const state = {
-  recipe: {},
+  recipe: {
+    id: 0,
+    title: '',
+    publisher: '',
+    imageUrl: '',
+    ingredients: [],
+    sourceUrl: '',
+    servings: '',
+    cookingTime: '',
+  },
   search: {
     query: '',
     results: [],
@@ -70,6 +79,10 @@ export const loadSearchResults = async query => {
   }
 };
 
+/* -------------------------------------------------------------------------- */
+/*                                    utils                                   */
+/* -------------------------------------------------------------------------- */
+
 export const getSearchResultsPage = (page = state.search.page) => {
   state.search.page = page;
 
@@ -77,4 +90,12 @@ export const getSearchResultsPage = (page = state.search.page) => {
   const end = page * state.search.resultsPerPage || 9;
 
   return state.search.results.slice(start, end);
+};
+
+export const updateServings = newServing => {
+  state.recipe.ingredients?.forEach(ing => {
+    ing.quantity *= newServing / state.recipe.servings;
+  });
+
+  state.recipe.servings = newServing;
 };
