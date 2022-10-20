@@ -9,6 +9,7 @@ import SearchView from './views/SearchView';
 import ResultsView from './views/ResultsView';
 import PaginationView from './views/PaginationView';
 import BookmarksView from './views/BookmarksView';
+import AddRecipeView from './views/AddRecipeView';
 
 /* -------------------------------------------------------------------------- */
 /*                           parcel keeps the state                           */
@@ -100,6 +101,10 @@ const controlBookmarks = () => {
   BookmarksView.render(model.state.bookmarks);
 };
 
+const controlAddRecipe = function (newRecipe) {
+  console.log(newRecipe);
+};
+
 /* -------------------------------------------------------------------------- */
 /*                                    init                                    */
 /* -------------------------------------------------------------------------- */
@@ -111,4 +116,5 @@ const controlBookmarks = () => {
   RecipeView.addHandlerAddBookmark(controlAddBookmark);
   SearchView.addHandlerSearch(controlSearchResults);
   PaginationView.addHandlerClick(controlPagination);
+  AddRecipeView.addHandlerUpload(controlAddRecipe);
 })();
