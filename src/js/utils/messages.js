@@ -3,4 +3,5 @@ export default class Messages {
   static RESULTS_ERROR = 'No results for this prompt';
   static BOOKMARKS_ERROR =
     'No bookmarsk yet. Find a nice recipe and bookmark it!';
+  static RECIPE_ADDED = 'Recipe was successfully uploaded';
 }

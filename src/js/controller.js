@@ -43,7 +43,6 @@ const controlRecipes = async () => {
     // rendering recipe
     RecipeView.render(model.state.recipe);
   } catch (err) {
-    console.error(err);
     RecipeView.renderError();
   }
 };
@@ -116,7 +115,7 @@ const controlAddRecipe = async function (newRecipe) {
     window.history.pushState(null, '', `#${model.state.recipe.id}`);
 
     setTimeout(() => {
-      AddRecipeView.toggleWindow();
+      location.reload();
     }, MODAL_CLOSE_SEC * 1000);
   } catch (err) {
     AddRecipeView.renderError(err.message);

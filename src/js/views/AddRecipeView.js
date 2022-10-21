@@ -1,8 +1,9 @@
 import View from './View';
+import Messages from '../utils/Messages';
 
 class AddRecipeView extends View {
   _parentEl = document.querySelector('.upload');
-  _message = 'Recipe was successfully uploaded';
+  _msg = Messages.RECIPE_ADDED;
 
   _window = document.querySelector('.add-recipe-window');
   _overlay = document.querySelector('.overlay');
@@ -37,8 +38,6 @@ class AddRecipeView extends View {
       handler(data);
     });
   }
-
-  _generateMarkup() {}
 }
 
 export default new AddRecipeView();

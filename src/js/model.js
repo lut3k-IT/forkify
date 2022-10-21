@@ -8,7 +8,7 @@ import { getRequest, postRequest } from './utils/helpers';
 import { API_KEY } from './utils/config';
 
 /* -------------------------------------------------------------------------- */
-/*                                   storage                                  */
+/*                                    state                                   */
 /* -------------------------------------------------------------------------- */
 
 export const state = {
@@ -78,20 +78,17 @@ export const deleteBookmark = id => {
   persistBookmarks();
 };
 
-const createRecipeObject = data => {
-  const { recipe } = data?.data;
-  return {
-    id: recipe.id,
-    title: recipe.title,
-    publisher: recipe.publisher,
-    sourceUrl: recipe.source_url,
-    image: recipe.image_url,
-    servings: recipe.servings,
-    cookingTime: recipe.cooking_time,
-    ingredients: recipe.ingredients,
-    ...(recipe.key && { key: recipe.key }),
-  };
-};
+const createRecipeObject = recipe => ({
+  id: recipe.id,
+  title: recipe.title,
+  publisher: recipe.publisher,
+  sourceUrl: recipe.source_url,
+  image: recipe.image_url,
+  servings: recipe.servings,
+  cookingTime: recipe.cooking_time,
+  ingredients: recipe.ingredients,
+  ...(recipe.key && { key: recipe.key }),
+});
 
 /* -------------------------------------------------------------------------- */
 /*                                  requests                                  */
@@ -103,13 +100,12 @@ export const getRecipe = async recipeId => {
       `${BASE_URL}/${Endpoints.RECIPES}/${recipeId}?key=${API_KEY}`,
     );
 
-    state.recipe = createRecipeObject(response?.data);
+    state.recipe = createRecipeObject(response.data.data.recipe);
 
     if (state.bookmarks.some(bookmark => bookmark.id === recipeId))
       state.recipe.bookmarked = true;
     else state.recipe.bookmarked = false;
   } catch (err) {
-    console.error(err);
     throw err;
   }
 };
@@ -134,7 +130,6 @@ export const loadSearchResults = async query => {
     });
     state.search.page = 1;
   } catch (err) {
-    console.error(err);
     throw err;
   }
 };
@@ -149,7 +144,6 @@ export const postRecipe = async function (newRecipe) {
         if (ingArr.length !== 3) throw new Error('Wrong ingredient format!');
 
         const [quantity, unit, description] = ingArr;
-
         return { quantity: quantity ? +quantity : null, unit, description };
       });
 
@@ -163,15 +157,13 @@ export const postRecipe = async function (newRecipe) {
       ingredients,
     };
 
-    const data = await postRequest(
+    const postRecipeData = await postRequest(
       `${BASE_URL}/${Endpoints.RECIPES}?key=${API_KEY}`,
       recipe,
     );
-    state.recipe = createRecipeObject(data);
+    state.recipe = createRecipeObject(postRecipeData.data.data.recipe);
     addBookmark(state.recipe);
   } catch (err) {
-    //FIXME: przy errorze nie da się ponownie otworzyć modala do dodawania przepisu
-    //FIXME: pokazuje że brakuje pola ID
     throw err;
   }
 };
