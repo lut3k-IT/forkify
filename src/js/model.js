@@ -100,7 +100,7 @@ const createRecipeObject = data => {
 export const getRecipe = async recipeId => {
   try {
     const response = await getRequest(
-      `${BASE_URL}/${Endpoints.RECIPES}/${recipeId}`,
+      `${BASE_URL}/${Endpoints.RECIPES}/${recipeId}?key=${API_KEY}`,
     );
 
     state.recipe = createRecipeObject(response?.data);
@@ -119,7 +119,7 @@ export const loadSearchResults = async query => {
     state.search.query = query;
 
     const response = await getRequest(
-      `${BASE_URL}/${Endpoints.RECIPES}?search=${query}`,
+      `${BASE_URL}/${Endpoints.RECIPES}?search=${query}key=${API_KEY}`,
     );
     const { recipes } = response?.data?.data;
 
@@ -129,6 +129,7 @@ export const loadSearchResults = async query => {
         title: recipe.title,
         publisher: recipe.publisher,
         imageUrl: recipe.image_url,
+        ...(recipe.key && { key: recipe.key }),
       };
     });
     state.search.page = 1;
