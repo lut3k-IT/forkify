@@ -10,6 +10,7 @@ import ResultsView from './views/ResultsView';
 import PaginationView from './views/PaginationView';
 import BookmarksView from './views/BookmarksView';
 import AddRecipeView from './views/AddRecipeView';
+import { MODAL_CLOSE_SEC } from './utils/config';
 
 /* -------------------------------------------------------------------------- */
 /*                           parcel keeps the state                           */
@@ -64,7 +65,6 @@ const controlSearchResults = async () => {
     // render init pagination
     PaginationView.render(model.state.search);
   } catch (err) {
-    console.error(err);
     RecipeView.renderError();
   }
 };
@@ -101,8 +101,26 @@ const controlBookmarks = () => {
   BookmarksView.render(model.state.bookmarks);
 };
 
-const controlAddRecipe = function (newRecipe) {
-  console.log(newRecipe);
+const controlAddRecipe = async function (newRecipe) {
+  try {
+    AddRecipeView.renderSpinner();
+
+    await model.postRecipe(newRecipe);
+
+    RecipeView.render(model.state.recipe);
+
+    AddRecipeView.renderMessage();
+
+    BookmarksView.render(model.state.bookmarks);
+
+    window.history.pushState(null, '', `#${model.state.recipe.id}`);
+
+    setTimeout(() => {
+      AddRecipeView.toggleWindow();
+    }, MODAL_CLOSE_SEC * 1000);
+  } catch (err) {
+    AddRecipeView.renderError(err.message);
+  }
 };
 
 /* -------------------------------------------------------------------------- */

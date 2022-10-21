@@ -4,7 +4,8 @@ import {
   SEARCH_INIT_PAGE,
   SERACH_RESULTS_PER_PAGE,
 } from './utils/config';
-import { getRequest } from './utils/helpers';
+import { getRequest, postRequest } from './utils/helpers';
+import { API_KEY } from './utils/config';
 
 /* -------------------------------------------------------------------------- */
 /*                                   storage                                  */
@@ -25,65 +26,10 @@ export const state = {
   search: {
     query: '',
     results: [],
-    resultsPerPage: SERACH_RESULTS_PER_PAGE,
     page: SEARCH_INIT_PAGE,
+    resultsPerPage: SERACH_RESULTS_PER_PAGE,
   },
   bookmarks: [],
-};
-
-/* -------------------------------------------------------------------------- */
-/*                                  requests                                  */
-/* -------------------------------------------------------------------------- */
-
-export const getRecipe = async recipeId => {
-  try {
-    const response = await getRequest(
-      `${BASE_URL}${Endpoints.RECIPES}${recipeId}`,
-    );
-    const { recipe } = response?.data?.data;
-
-    state.recipe = {
-      id: recipe.id,
-      title: recipe.title,
-      publisher: recipe.publisher,
-      imageUrl: recipe.image_url,
-      ingredients: recipe.ingredients,
-      sourceUrl: recipe.source_url,
-      servings: recipe.servings,
-      cookingTime: recipe.cooking_time,
-    };
-
-    if (state.bookmarks.some(bookmark => bookmark.id === recipeId))
-      state.recipe.bookmarked = true;
-    else state.recipe.bookmarked = false;
-  } catch (err) {
-    console.error(err);
-    throw err;
-  }
-};
-
-export const loadSearchResults = async query => {
-  try {
-    state.search.query = query;
-
-    const response = await getRequest(
-      `${BASE_URL}${Endpoints.RECIPES}?search=${query}`,
-    );
-    const { recipes } = response?.data?.data;
-
-    state.search.results = recipes?.map(recipe => {
-      return {
-        id: recipe.id,
-        title: recipe.title,
-        publisher: recipe.publisher,
-        imageUrl: recipe.image_url,
-      };
-    });
-    state.search.page = 1;
-  } catch (err) {
-    console.error(err);
-    throw err;
-  }
 };
 
 /* -------------------------------------------------------------------------- */
@@ -130,6 +76,103 @@ export const deleteBookmark = id => {
   if (id === state.recipe.id) state.recipe.bookmarked = false;
 
   persistBookmarks();
+};
+
+const createRecipeObject = data => {
+  const { recipe } = data?.data;
+  return {
+    id: recipe.id,
+    title: recipe.title,
+    publisher: recipe.publisher,
+    sourceUrl: recipe.source_url,
+    image: recipe.image_url,
+    servings: recipe.servings,
+    cookingTime: recipe.cooking_time,
+    ingredients: recipe.ingredients,
+    ...(recipe.key && { key: recipe.key }),
+  };
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                  requests                                  */
+/* -------------------------------------------------------------------------- */
+
+export const getRecipe = async recipeId => {
+  try {
+    const response = await getRequest(
+      `${BASE_URL}/${Endpoints.RECIPES}/${recipeId}`,
+    );
+
+    state.recipe = createRecipeObject(response?.data);
+
+    if (state.bookmarks.some(bookmark => bookmark.id === recipeId))
+      state.recipe.bookmarked = true;
+    else state.recipe.bookmarked = false;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};
+
+export const loadSearchResults = async query => {
+  try {
+    state.search.query = query;
+
+    const response = await getRequest(
+      `${BASE_URL}/${Endpoints.RECIPES}?search=${query}`,
+    );
+    const { recipes } = response?.data?.data;
+
+    state.search.results = recipes?.map(recipe => {
+      return {
+        id: recipe.id,
+        title: recipe.title,
+        publisher: recipe.publisher,
+        imageUrl: recipe.image_url,
+      };
+    });
+    state.search.page = 1;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};
+
+export const postRecipe = async function (newRecipe) {
+  try {
+    const ingredients = Object.entries(newRecipe)
+      .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
+      .map(ing => {
+        const ingArr = ing[1].split(',').map(el => el.trim());
+
+        if (ingArr.length !== 3) throw new Error('Wrong ingredient format!');
+
+        const [quantity, unit, description] = ingArr;
+
+        return { quantity: quantity ? +quantity : null, unit, description };
+      });
+
+    const recipe = {
+      title: newRecipe.title,
+      source_url: newRecipe.sourceUrl,
+      image_url: newRecipe.image,
+      publisher: newRecipe.publisher,
+      cooking_time: +newRecipe.cookingTime,
+      servings: +newRecipe.servings,
+      ingredients,
+    };
+
+    const data = await postRequest(
+      `${BASE_URL}/${Endpoints.RECIPES}?key=${API_KEY}`,
+      recipe,
+    );
+    state.recipe = createRecipeObject(data);
+    addBookmark(state.recipe);
+  } catch (err) {
+    //FIXME: przy errorze nie da się ponownie otworzyć modala do dodawania przepisu
+    //FIXME: pokazuje że brakuje pola ID
+    throw err;
+  }
 };
 
 /* -------------------------------------------------------------------------- */
