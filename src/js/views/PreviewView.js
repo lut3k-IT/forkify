@@ -2,8 +2,6 @@ import View from './View';
 import icons from '/src/img/icons.svg';
 
 class PreviewView extends View {
-  _parentEl = '';
-
   _generateMarkup() {
     const id = window.location.hash.slice(1);
 

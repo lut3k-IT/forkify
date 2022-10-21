@@ -4,7 +4,7 @@ import PreviewView from './PreviewView';
 
 class ResultsView extends View {
   _parentEl = document.querySelector('.results');
-  _msg = 'Loaded successfully';
+  _msg = Messages.RESULTS_LOADED;
   _errMsg = Messages.RESULTS_ERROR;
 
   _generateMarkup() {

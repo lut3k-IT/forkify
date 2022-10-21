@@ -1,6 +1,8 @@
 import View from './View';
 import Messages from '../utils/Messages';
 
+//FIXME: unable to add a recipe after an error
+
 class AddRecipeView extends View {
   _parentEl = document.querySelector('.upload');
   _msg = Messages.RECIPE_ADDED;

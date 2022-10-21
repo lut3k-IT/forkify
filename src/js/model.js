@@ -83,7 +83,7 @@ const createRecipeObject = recipe => ({
   title: recipe.title,
   publisher: recipe.publisher,
   sourceUrl: recipe.source_url,
-  image: recipe.image_url,
+  imageUrl: recipe.image_url,
   servings: recipe.servings,
   cookingTime: recipe.cooking_time,
   ingredients: recipe.ingredients,
@@ -115,7 +115,7 @@ export const loadSearchResults = async query => {
     state.search.query = query;
 
     const response = await getRequest(
-      `${BASE_URL}/${Endpoints.RECIPES}?search=${query}key=${API_KEY}`,
+      `${BASE_URL}/${Endpoints.RECIPES}?search=${query}&key=${API_KEY}`,
     );
     const { recipes } = response?.data?.data;
 

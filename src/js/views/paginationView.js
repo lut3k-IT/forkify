@@ -37,7 +37,7 @@ class PaginationView extends View {
         this._generateMarkupNextPage(curPage)
       );
     }
-    // Page 1, and there are no other pages
+    // Page 1, and there are no other pages (nothing)
   }
 
   _generateMarkupPreviousPage(curPage) {

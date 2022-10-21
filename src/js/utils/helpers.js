@@ -1,20 +1,17 @@
 import axios from 'axios';
 import { ABORT_TIMEOUT } from './config';
 
-//TODO: zrobić axios instance https://axios-http.com/docs/config_defaults
-//TODO: zrobić to lepiej, jako 1 funkcję czy coś (requesty)
-
-const timeout = function (sec, controller) {
+const timeout = function (controller) {
   setTimeout(() => {
     controller.abort();
-  }, sec * 1000);
+  }, ABORT_TIMEOUT * 1000);
 };
 
 export const getRequest = async url => {
   const controller = new AbortController();
   const { signal } = controller;
 
-  timeout(ABORT_TIMEOUT, controller);
+  timeout(controller);
 
   try {
     const response = await axios.get(url, { signal });
@@ -28,7 +25,7 @@ export const postRequest = async (url, data) => {
   const controller = new AbortController();
   const { signal } = controller;
 
-  timeout(ABORT_TIMEOUT, controller);
+  timeout(controller);
 
   try {
     const response = await axios({
